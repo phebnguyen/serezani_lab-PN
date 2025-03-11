@@ -17,9 +17,11 @@ if (dir.exists(outputdir) = FALSE){
     dir.create(outputdir)
 }
 
+
+##### Almat et al #####
+
 # Load nondiabetic integrated skin datasets for cell-typing
 # Source: https://zenodo.org/records/10198892
-
 # Convert the scanpy .h5ad file to a single cell experiment
 sce <- readH5AD(paste0(datadir, "integratedskindata.h5ad"))
 saveRDS(sce, file = paste0(outputdir, "integrated_skin_reference-sce.rds"))
@@ -88,6 +90,19 @@ saveRDS(integrated_skin, file = paste0(outputdir, "integrated_skin_reference-Seu
 # Not enough RAM, try another dataset
 options(future.globals.maxSize = 4 * 1024^3)  # Set to 4GB
 integrated_skin <- SCTransform(integrated_skin, verbose = FALSE)
+
+
+##### Guerrero-Juarez et al #####
+# https://pubmed.ncbi.nlm.nih.gov/30737373/
+guerrero_juarez.data <- read.table(paste0(datadir, "Guerrero-Juarez_2019/GSE113605_Plikus_C1_PWD12_v3_Mv13_Matrix.txt"),
+                                   header = TRUE)
+guerrero_juarez <- CreateSeuratObject(counts = guerrero_juarez.data,
+                                      project = "g_juarez",
+                                      min.cells = 3,
+                                      min.features = 200)
+
+
+
 
 ##### Integration with scRNAseq data #####
 
